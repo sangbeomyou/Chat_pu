@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "server": "cd server && nodemon server",
+    "client": "cd chat_pu && yarn start",
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  },
+  "dependencies": {
+    "concurrently": "^7.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "mssql": "^8.0.2",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
