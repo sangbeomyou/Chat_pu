@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Form, Input, Button, Card, Row, Col } from "antd";
 import styled from "styled-components";
 import { loginAction } from "../reducers/user";
 import { useDispatch } from "react-redux";
-import io from "socket.io-client";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -20,9 +19,6 @@ const FormWrapper = styled(Form)`
 const CardWrapper = styled(Card)`
   background-color: #f2f2f2;
 `;
-
-const socket = io.connect('/');
-
 
 function Login() {
   const dispatch = useDispatch();
@@ -40,8 +36,7 @@ function Login() {
   };
 
   const onsubmitForm = () => {
-    socket.emit('init', { idtest : id, password : password});
-    
+
     axios
       .post("/api/login", null, {
         params: {
@@ -50,20 +45,15 @@ function Login() {
         },
       })
       .then(function (response) {
-        response.data.result ? dispatch(loginAction(response.data.posts)) : alert('아이디와 비밀번호를 확인해주세요')
+        response.data.result
+          ? dispatch(loginAction(response.data.posts))
+          : alert("아이디와 비밀번호를 확인해주세요");
       });
   };
-  // 페이지 렌더링 후 가장 처음 호출되는 함수
-  useEffect(() => {
-    socket.on('event', (data) => {
-      console.log(data);
-    });
-  });
 
   return (
     <Row gutter={8}>
-      <Col xs={24} md={6}>
-      </Col>
+      <Col xs={24} md={6}></Col>
 
       <Col xs={24} md={12}>
         <FormWrapper onFinish={onsubmitForm}>

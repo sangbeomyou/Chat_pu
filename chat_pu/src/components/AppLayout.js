@@ -9,6 +9,7 @@ import { logoutAction } from "../reducers/user";
 import { tree_Action, memberlist_Action } from "../reducers/member";
 import Member from "./member/MemberLayout";
 import Chat from "./chat/ChatLayout";
+import { socket } from './chat/Socket';
 
 
 const SearchInput = styled(Input.Search)`
@@ -42,10 +43,10 @@ const AppLayout = () => {
     });
   }, [dispatch]);
 
-
   useEffect(() => {
+    socket.emit('joinRoom','1');
     callApi();
-  }, [callApi]);
+  }, [callApi, me]);
 
   return (
     <div>
