@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
 
   });
   
+  
 });
 
 const port = 5000; // 노드 서버가 작동할 포트넘버
