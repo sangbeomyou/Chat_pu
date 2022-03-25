@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col } from "antd";
 import ChatMenu from "./ChatMenu";
 import ChatBox from "./ChatBox";
+import Online from "./Online";
 
 const ChatLayout = () => {
   return (
@@ -14,7 +15,7 @@ const ChatLayout = () => {
           <ChatBox />
         </Col>
         <Col xs={24} md={6}>
-          online
+          <Online />
         </Col>
       </Row>
     </div>

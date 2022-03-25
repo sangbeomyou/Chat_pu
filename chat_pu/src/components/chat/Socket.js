@@ -5,21 +5,21 @@ export const socket = io.connect("/", {
     transport: ["websocket"],
   });
   
-export const sendMessage = (e,roomId)=>{
-    const message = document.querySelector('.send');
-    socket.emit('chat message', message.value,roomId);
-    document.querySelector('.message-list')?.appendChild(makeMessage(message.value,true));
-    message.value='';
-}
-export const socketOnMessage = ()=>{
-    socket.on('chat message',(message)=>{
-        document.querySelector('.message-list').appendChild(makeMessage(message,false));
-    });
-}
+// export const sendMessage = (e,roomId)=>{
+//     const message = document.querySelector('.send');
+//     socket.emit('chat message', message.value,roomId);
+//     document.querySelector('.message-list')?.appendChild(makeMessage(message.value,true));
+//     message.value='';
+// }
+// export const socketOnMessage = ()=>{
+//     socket.on('chat message',(message)=>{
+//         document.querySelector('.message-list').appendChild(makeMessage(message,false));
+//     });
+// }
 
-export const makeMessage = (message,isMine) => {
-    const msgBox = document.createElement('div');
-    msgBox.className = isMine? "my-message": "other-message";
-    msgBox.innerText = message;
-    return msgBox;
-}
+// export const makeMessage = (message,isMine) => {
+//     const msgBox = document.createElement('div');
+//     msgBox.className = isMine? "my-message": "other-message";
+//     msgBox.innerText = message;
+//     return msgBox;
+// }

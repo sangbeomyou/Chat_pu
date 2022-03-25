@@ -1,5 +1,7 @@
 const chatStates = {
-    chatList: [],
+    room : [],
+    message: '',
+    messages: [],
     socketId: null
 };
 

@@ -1,79 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Card } from "antd";
+import { Button, Input } from "antd";
 import { socket } from "./Socket";
+import { useSelector } from "react-redux";
+import ChatMessages from "./ChatMessages";
 import styled from "styled-components";
 
-const MessageboxRight = styled.p`
-  margin: 0;
-  font-size: 18px;
-  color: white;
-  margin-left: auto;
-  width: 70%;
+const Container = styled.div`
+  margin-top: 10px;
   display: flex;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  background-color: rgb(240, 119, 59);
-  min-height: 40px;
-  border-radius: 10px;
-`;
-
-const MessageboxLeft = styled.p`
-  margin: 0;
-  font-size: 18px;
-  color: white;
-  margin-right: auto;
-  width: 70%;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  background-color: rgb(240, 119, 59);
-  min-height: 40px;
-  border-radius: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 0.1px solid #eaeaea;
+  height: 80vh;
+  width: 100%;
 `;
 
 const ChatBox = () => {
   const [sendMessage, setsendMessage] = useState("");
   const [receiveMessage, setreceiveMessage] = useState([]);
+  const { me } = useSelector((state) => state.user);
 
   const onChange = (e) => {
     setsendMessage(e.target.value);
   };
+
   const onsubmitForm = () => {
     setreceiveMessage((currentArray) => [
-      { text: sendMessage, position: "right" },
+      { text: sendMessage.trim(), position: "right" },
       ...currentArray,
     ]);
-    socket.emit("chat message", sendMessage, "1");
+    socket.emit("chat message", sendMessage.trim(), "1", me[0].korname);
     setsendMessage("");
   };
+
   useEffect(() => {
-    socket.on("chat message", (message) => {
+    socket.on("chat message", (message, name) => {
       setreceiveMessage((currentArray) => [
-        { text: message, position: "left" },
+        { text: message, position: "left", name: name },
         ...currentArray,
-      ]);      console.log(receiveMessage);
+      ]);
+      console.log(message, name);
     });
   }, []);
   return (
     <>
-      <Card>
-        {receiveMessage.map((item, index) => (
-          item.position === "left" ? <MessageboxLeft key={index}>{item.text}</MessageboxLeft> : <MessageboxRight key={index}>{item.text}</MessageboxRight>
-        ))}
-      </Card>
-      <Input.Group compact>
-        <Input
-          value={sendMessage}
-          onPressEnter={onsubmitForm}
-          onChange={onChange}
-          style={{ width: "calc(100% - 61px)" }}
-        />
-        <Button onClick={onsubmitForm} type="primary">
-          send
-        </Button>
-      </Input.Group>
+      <Container>
+        <ChatMessages receiveMessage={receiveMessage}></ChatMessages>
+        <Input.Group compact>
+          <Input
+            value={sendMessage}
+            onPressEnter={onsubmitForm}
+            onChange={onChange}
+            style={{ width: "calc(100% - 73px)" }}
+          />
+          <Button onClick={onsubmitForm} type="primary">
+            보내기
+          </Button>
+        </Input.Group>
+      </Container>
     </>
   );
 };

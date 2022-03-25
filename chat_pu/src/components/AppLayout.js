@@ -9,8 +9,7 @@ import { logoutAction } from "../reducers/user";
 import { tree_Action, memberlist_Action } from "../reducers/member";
 import Member from "./member/MemberLayout";
 import Chat from "./chat/ChatLayout";
-import { socket } from './chat/Socket';
-
+import { socket } from "./chat/Socket";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -23,7 +22,7 @@ const LeftMenu = styled(Menu.Item)`
 
 const AppLayout = () => {
   const dispatch = useDispatch();
-  
+
   const onsubmitForm = () => {
     dispatch(logoutAction());
   };
@@ -31,20 +30,27 @@ const AppLayout = () => {
   const { me } = useSelector((state) => state.user);
 
   const callApi = useCallback(async () => {
-    axios.post("/api/tree_menu", null, {}).then(function (res) {
-      res.data.result
-        ? dispatch(tree_Action(res.data.posts))
-        : alert("서버 오류 입니다.");
-    });
-    axios.post("/api/member_list", null, {}).then(function (response) {
-      response.data.result
-        ? dispatch(memberlist_Action(response.data.posts))
-        : alert("서버 오류 입니다.");
-    });
+    try {
+      await axios.post("/api/tree_menu", null, {}).then(function (response) {
+        response.data.result
+          ? dispatch(tree_Action(response.data.posts))
+          : alert("서버 오류 입니다.");
+      });
+      await axios.post("/api/member_list", null, {}).then(function (response) {
+        response.data.result
+          ? dispatch(memberlist_Action(response.data.posts))
+          : alert("서버 오류 입니다.");
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }, [dispatch]);
 
   useEffect(() => {
-    socket.emit('joinRoom','1');
+    socket.emit("joinRoom", { roomId: "1", name: me[0].korname });
+    socket.on("chat message", (message, name) => {
+      console.log(message, name);
+    });
     callApi();
   }, [callApi, me]);
 

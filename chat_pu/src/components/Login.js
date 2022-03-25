@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Input, Button, Card, Row, Col } from "antd";
 import styled from "styled-components";
@@ -50,6 +50,12 @@ function Login() {
           : alert("아이디와 비밀번호를 확인해주세요");
       });
   };
+
+  // useEffect(() => {
+  //   axios.get("/sss/api/fnlttMultiAcnt.json?crtfc_key=eca02adc604b222887bb4f46c21a8bcf667ebeea&corp_code=00120571&bsns_year=2021&reprt_code=11011", null, {}).then(function (response) {
+  //     console.log(response.data);
+  //   });
+  // }, []);
 
   return (
     <Row gutter={8}>
