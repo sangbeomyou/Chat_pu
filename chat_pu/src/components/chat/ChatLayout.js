@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Button } from "antd";
 import ChatMenu from "./ChatMenu";
 import ChatBox from "./ChatBox";
 import Online from "./Online";
@@ -12,7 +12,9 @@ const ChatLayout = () => {
           <ChatMenu />
         </Col>
         <Col xs={24} md={12}>
-          <ChatBox />
+        <Button onClick={() => window.open("/", "", "_blank")}> 
+팝업</Button>
+          {/* <ChatBox /> */}
         </Col>
         <Col xs={24} md={6}>
           <Online />

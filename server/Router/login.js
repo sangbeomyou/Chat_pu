@@ -25,7 +25,6 @@ router.post("/login", (req, res) => {
           return;
         } else {
           if (data.rowsAffected.length > 0) {
-            console.log(data);
           } else {
             console.log("No hay datos en la tabla");
           }
@@ -40,7 +39,6 @@ router.post("/login", (req, res) => {
       })
       .on("done", (data) => {
         // 마지막에 실행되는
-        console.log("result :", result);
         return data.rowsAffected > 0 ? res.status(200).send({ "result" : true, posts: result }) : res.status(200).send({ "result" : false })
       });
   });

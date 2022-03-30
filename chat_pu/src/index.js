@@ -5,21 +5,29 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.min.css";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from 'redux';
-import { createLogger } from 'redux-logger'; 
-import { composeWithDevTools } from 'redux-devtools-extension'; 
-import rootReducer from './reducers/rootReducer';
+import { createStore, applyMiddleware } from "redux";
+import { createLogger } from "redux-logger";
+import { composeWithDevTools } from "redux-devtools-extension";
+import persistReducer from "./reducers/rootReducer";
 import { BrowserRouter } from "react-router-dom";
 
-const logger = createLogger(); 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger)));
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
+const logger = createLogger();
+const store = createStore(
+  persistReducer,
+  composeWithDevTools(applyMiddleware(logger))
+);
+const persistor = persistStore(store);
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

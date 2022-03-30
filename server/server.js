@@ -32,10 +32,16 @@ io.on('connection', (socket) => {
     socket.leave(roomId);
   });
 
+  socket.on('logout', () => {
+    removeUser(socketid)
+    console.log('로그아웃',users)
+    io.emit('chat online', users);
+  });
+
+  
   socket.on('joinRoom', ({roomId, name}) => {
     addUser({id : socketid, name, roomId})
-    console.log('방가입',users
-    )
+    console.log('방가입',users)
     socket.join(roomId);
     io.to(roomId).emit('joinRoom', roomId);
     io.emit('chat online', users);

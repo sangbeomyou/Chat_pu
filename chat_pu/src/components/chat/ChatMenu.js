@@ -24,6 +24,7 @@ const ChatMenu = () => {
         </Row>
         </CardWrapper>
         <Row>
+          체팅방 목록 넣을꺼임
         </Row>
     </div>
   );

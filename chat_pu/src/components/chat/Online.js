@@ -1,26 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./Message.css";
-import { socket } from "./Socket";
 import { Card } from "antd";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { onlineUsersAction } from "../../reducers/user";
+import { useSelector } from "react-redux";
 
 const CardWrapper = styled(Card)`
   margin-top: 10px;
 `;
 
 const Online = () => {
-  const dispatch = useDispatch();
   const { onlineUsers } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    socket.on("chat online", (online) => {
-      console.log("tesst", online);
-      dispatch(onlineUsersAction(online));
-    });
-    console.log("sdsadsaggg", onlineUsers);
-  }, [dispatch, onlineUsers]);
 
   return (
     <>

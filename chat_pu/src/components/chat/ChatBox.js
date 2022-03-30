@@ -40,7 +40,6 @@ const ChatBox = () => {
         { text: message, position: "left", name: name },
         ...currentArray,
       ]);
-      console.log(message, name);
     });
   }, []);
   return (

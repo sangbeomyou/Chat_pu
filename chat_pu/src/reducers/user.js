@@ -15,7 +15,7 @@ export const loginAction = (data) => {
 
 export const logoutAction = () => {
   return {
-    type: "LOG_OUT",
+    type: "USER_LOGOUT",
   };
 };
 
@@ -36,13 +36,13 @@ const reducer = (state = initialState, action) => {
         isLoggedIn: true,
         me: action.data,
       };
-    case "LOG_OUT":
-      return {
-        // 감싸주던 user가 없어졌기 때문에 한 단계 빼줘야한다.
-        ...state,
-        isLoggedIn: false,
-        me: null,
-      };
+    // case "LOG_OUT":
+    //   return {
+    //     // 감싸주던 user가 없어졌기 때문에 한 단계 빼줘야한다.
+    //     ...state,
+    //     isLoggedIn: false,
+    //     me: null,
+    //   };
       case "ONLINE_LIST":
         return {
           // 감싸주던 user가 없어졌기 때문에 한 단계 빼줘야한다.
