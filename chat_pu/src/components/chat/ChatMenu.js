@@ -1,31 +1,48 @@
 import React from "react";
 import styled from "styled-components";
-import { Input, Row, Card } from "antd";
-const { Search } = Input;
+import { useSelector } from "react-redux";
+import { Input, Row, Card, Tabs } from "antd";
+import ChatUserList from "./chattab/ChatUserList";
+import ChatSearch from "./ChatSearch";
 
-const SearchInput = styled(Search)`
-    padding: 10px;
-    border: none;
-    border-bottom: 1px solid #BDBDBD;
-`;
+const { TabPane } = Tabs;
+
+const { Search } = Input;
 
 const CardWrapper = styled(Card)`
   margin-top: 10px;
 `;
 
-const onSearch = value => console.log(value);
-
 const ChatMenu = () => {
   return (
     <div>
       <CardWrapper>
-        <Row>
-            <SearchInput placeholder="" onSearch={onSearch} />  
-        </Row>
-        </CardWrapper>
-        <Row>
-          체팅방 목록 넣을꺼임
-        </Row>
+      <ChatSearch/>
+        <Tabs defaultActiveKey="1" centered tabBarGutter="10">
+          <TabPane
+            tab={
+              <span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 채팅방
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            }
+            key="1"
+          >
+            Tab 1
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 사원
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </span>
+            }
+            key="2"
+          >
+            <ChatUserList/>
+          </TabPane>
+        </Tabs>
+      </CardWrapper>
     </div>
   );
 };

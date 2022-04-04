@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import axios from "axios";
-import { Menu, Input, Avatar, Badge, Button } from "antd";
+import { Menu, Avatar, Badge, Button } from "antd";
 import { Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { UserOutlined } from "@ant-design/icons";
@@ -12,11 +12,6 @@ import Chat from "./chat/ChatLayout";
 import { socket } from "./chat/Socket";
 
 
-const SearchInput = styled(Input.Search)`
-  vertical-align: middle;
-  margin-top: 5px;
-  margin-bottom: 10px;
-`;
 const LeftMenu = styled(Menu.Item)`
   margin-left: auto;
 `;
@@ -68,7 +63,7 @@ const AppLayout = () => {
     <div>
       <Menu mode="horizontal">
         <Menu.Item key="member">
-          <Link to="/member">맴버</Link>
+          <Link to="/member">조직도</Link>
         </Menu.Item>
         <Menu.Item key="chat">
           <Link to="/chat">채팅</Link>
@@ -76,9 +71,7 @@ const AppLayout = () => {
         <Menu.Item key="schedule">
           <Link to="/schedule">일정</Link>
         </Menu.Item>
-        <Menu.Item key="search">
-          <SearchInput enterButton />
-        </Menu.Item>
+
         <LeftMenu key="name" disabled="false">
           <span>{me[0].korname}</span>
         </LeftMenu>
