@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Input, Card } from "antd";
 import { socket } from "./Socket";
 import { useSelector } from "react-redux";
@@ -16,11 +16,8 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const CardWrapper = styled(Card)`
-  margin-top: 10px;
-`;
-
 const ChatBox = () => {
+  
   const [sendMessage, setsendMessage] = useState("");
   const [receiveMessage, setreceiveMessage] = useState([]);
   const { me } = useSelector((state) => state.user);
@@ -42,8 +39,11 @@ const ChatBox = () => {
   // 방 인원 목록
   const roomtitle= roomlist.filter((item) => item.room_id === room)[0]
 
+
   useEffect(() => {
+    console.log(room);
     socket.on("chat message", (message, name, roomId) => {
+      console.log("roomId :", roomId, "room :", room) 
       roomId === room ?
       setreceiveMessage((currentArray) => [
         { text: message, position: "left", name: name },
@@ -52,10 +52,10 @@ const ChatBox = () => {
     });
   }, []);
   return (
-    <>
+   <>
       <Container>
       <Card>{roomtitle.chatusers}</Card>
-
+      
         <ChatMessages receiveMessage={receiveMessage}></ChatMessages>
         <Input.Group compact>
           <Input
@@ -70,6 +70,6 @@ const ChatBox = () => {
         </Input.Group>
       </Container>
     </>
-  );
+  ) 
 };
 export default ChatBox;

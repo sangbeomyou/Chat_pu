@@ -65,7 +65,6 @@ const AppLayout = () => {
   const connect_room = (data) => {
     dispatch(roomlist_Action(data))
     data.map((item) => {
-      console.log('방가입')
       socket.emit("joinRoom", { roomId: item.room_id, name: me[0].korname, empno: me[0].empno });
     })
   }
@@ -75,7 +74,6 @@ const AppLayout = () => {
   //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원랴 있던방등 바꾸어 줘야함
 
   socket.on("chat online", (online) => {
-    console.log('온라인')
     dispatch(onlineUsersAction(online));
   });
   

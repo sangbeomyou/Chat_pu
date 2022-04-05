@@ -11,7 +11,7 @@ function App() {
 
   moment.locale('ko')
   var da = moment().format("YYYY-MM-DD HH:mm")
-  console.log(moment(da).format("LTS"))
+  // console.log(moment(da).format("LTS"))
   return (
     <div>
       <title>{me ? me[0].korname  :  "CHAT"} </title>

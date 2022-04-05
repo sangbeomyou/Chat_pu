@@ -57,6 +57,7 @@ const reducer = (state = chatStates, action) => {
     case "ROOM_SET":
       return {
         ...state,
+        room: null,
         room: action.data,
       };
     default:
