@@ -1,24 +1,30 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { Input, Row, Card, Tabs } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { changeTab_Action } from "../../reducers/chat";
+import { Card, Tabs } from "antd";
 import ChatUserList from "./chattab/ChatUserList";
-import ChatSearch from "./ChatSearch";
+import ChatRoom from "./chattab/ChatRoom";
 
 const { TabPane } = Tabs;
-
-const { Search } = Input;
 
 const CardWrapper = styled(Card)`
   margin-top: 10px;
 `;
 
 const ChatMenu = () => {
+  const dispatch = useDispatch();
+  const { chatmenutab } = useSelector((state) => state.chat);
   return (
     <div>
       <CardWrapper>
-      <ChatSearch/>
-        <Tabs defaultActiveKey="1" centered tabBarGutter="10">
+        <Tabs
+          defaultActiveKey={chatmenutab}
+          activeKey={chatmenutab}
+          centered
+          tabBarGutter="10"
+          onTabClick={(key) => dispatch(changeTab_Action(key))}
+        >
           <TabPane
             tab={
               <span>
@@ -28,7 +34,7 @@ const ChatMenu = () => {
             }
             key="1"
           >
-            Tab 1
+            <ChatRoom />
           </TabPane>
           <TabPane
             tab={
@@ -38,8 +44,9 @@ const ChatMenu = () => {
               </span>
             }
             key="2"
+            onClick={() => console.log(1)}
           >
-            <ChatUserList/>
+            <ChatUserList />
           </TabPane>
         </Tabs>
       </CardWrapper>

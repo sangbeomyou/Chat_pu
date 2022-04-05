@@ -4,6 +4,7 @@ import { Form, Input, Button, Card, Row, Col } from "antd";
 import styled from "styled-components";
 import { loginAction } from "../reducers/user";
 import { useDispatch } from "react-redux";
+import { socket } from "./chat/Socket";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -36,19 +37,26 @@ function Login() {
   };
 
   const onsubmitForm = () => {
+    // socket.emit("login", id);
+    // socket.on("login check", (id) => {
+    //   if (id.length === 0) {
 
+    //   } else {
+    //     alert("이미 로그인된 아이디 입니다.");
+    //   }
+    // });
     axios
-      .post("/api/login", null, {
-        params: {
-          empno: id,
-          passwd: password,
-        },
-      })
-      .then(function (response) {
-        response.data.result
-          ? dispatch(loginAction(response.data.posts))
-          : alert("아이디와 비밀번호를 확인해주세요");
-      });
+    .post("/api/login", null, {
+      params: {
+        empno: id,
+        passwd: password,
+      },
+    })
+    .then(function (response) {
+      response.data.result
+        ? dispatch(loginAction(response.data.posts))
+        : alert("아이디와 비밀번호를 확인해주세요");
+    });
   };
 
   return (

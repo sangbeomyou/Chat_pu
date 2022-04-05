@@ -7,6 +7,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction, onlineUsersAction } from "../reducers/user";
 import { tree_Action, memberlist_Action } from "../reducers/member";
+import { roomlist_Action } from "../reducers/chat"
 import Member from "./member/MemberLayout";
 import Chat from "./chat/ChatLayout";
 import { socket } from "./chat/Socket";
@@ -27,6 +28,8 @@ const AppLayout = () => {
 
   // 유저 정보 받아옴
   const { me } = useSelector((state) => state.user); 
+  const { roomlist } = useSelector((state) => state.chat); 
+
   // 유저 정보 세션에 저장
   localStorage.setItem('me', JSON.stringify(me));
 
@@ -43,19 +46,40 @@ const AppLayout = () => {
           ? dispatch(memberlist_Action(response.data.posts))
           : alert("서버 오류 입니다.");
       });
+      await axios
+      .post("/api/chatroomlist", null, {
+        params: {
+          empno: me[0].empno,
+        },
+      })
+      .then(function (response) {
+        response.data.result
+          ? connect_room(response.data.posts)
+          : alert("서버 오류 입니다.");
+      });
     } catch (error) {
       console.error(error);
     }
   }, [dispatch]);
 
-  //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원랴 있던방등 바꾸어 줘야함
+  const connect_room = (data) => {
+    dispatch(roomlist_Action(data))
+    data.map((item) => {
+      console.log('방가입')
+      socket.emit("joinRoom", { roomId: item.room_id, name: me[0].korname, empno: me[0].empno });
+    })
+  }
+
   useEffect(() => {
-    socket.emit("joinRoom", { roomId: "1", name: me[0].korname });
     callApi();
+  //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원랴 있던방등 바꾸어 줘야함
+
+  socket.on("chat online", (online) => {
+    console.log('온라인')
+    dispatch(onlineUsersAction(online));
+  });
+  
     // 채팅페이지 접속한 유저를 실시간으로 받아오는 로직 로그인 하거나 나갈때 배열에서 추가하거나 뺴고 여기로 뿌려준다. 
-    socket.on("chat online", (online) => {
-      dispatch(onlineUsersAction(online));
-    });
 
   }, [dispatch, callApi, me]);
 

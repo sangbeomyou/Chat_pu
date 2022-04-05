@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 
 import user from './user';
 import member from './member';
+import chat from './chat';
 
 const persistConfig = {
   key: "root",
@@ -16,7 +17,8 @@ const persistConfig = {
 
 const appReducer  = combineReducers({
     user,
-    member
+    member,
+    chat
 });
 
 const rootReducer = (state, action) => {

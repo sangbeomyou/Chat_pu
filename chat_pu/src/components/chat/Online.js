@@ -21,6 +21,9 @@ const SpanOlineNum = styled.span`
 
 const Online = () => {
   const { onlineUsers } = useSelector((state) => state.user);
+  const { room } = useSelector((state) => state.chat);
+
+  const onlineUsersroom = onlineUsers.filter((item) => item.roomId === room)
 
   return (
     <>
@@ -35,20 +38,26 @@ const Online = () => {
                   backgroundColor: "#1890ff",
                 }}
               >
-                {onlineUsers.length}
+                {onlineUsersroom.length}
               </Avatar>
             </SpanOlineNum>
             <RowWrapper>
-              {onlineUsers.map((item, i) => (
-                <div key={i}>
-                  <span className="avatar-item">
-                    <Badge count={1}>
-                      <Avatar size={40}> {item.name}</Avatar>
-                    </Badge>
-                  </span>
-                  &nbsp; &nbsp;
-                </div>
-              ))}
+              <Avatar.Group
+                maxCount={5}
+                size={40}
+                maxStyle={{ backgroundColor: "#1890ff" }}
+              >
+                {onlineUsersroom.map((item, i) => (
+                  <div key={i}>
+                    <span className="avatar-item">
+                      <Badge count={1}>
+                        <Avatar size={40}> {item.name}</Avatar>
+                      </Badge>
+                    </span>
+                    &nbsp; &nbsp;
+                  </div>
+                ))}
+              </Avatar.Group>
             </RowWrapper>
           </CardWrapper>
         </>

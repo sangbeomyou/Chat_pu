@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const SocketIO = require("socket.io");
-const { addUser, removeUser, getUser, getUsersInRoom, getUsers } = require('./chat/chat_users')
+const { addUser, removeUser, getUser, getUsersInRoom, getUsers, getUserCheck } = require('./chat/chat_users')
 const io = SocketIO(server);
 
 const test = require("./Router/test");
 const login = require("./Router/login");
 const member = require("./Router/member");
+const chat = require("./Router/chat");
 
-app.use("/api", login, member);
+app.use("/api", login, member, chat);
 app.use("/api1", test);
 
 io.on('connection', (socket) => {
@@ -37,10 +38,15 @@ io.on('connection', (socket) => {
     console.log('로그아웃',users)
     io.emit('chat online', users);
   });
-
   
-  socket.on('joinRoom', ({roomId, name}) => {
-    addUser({id : socketid, name, roomId})
+  socket.on('login', (empno) => {
+    console.log('로그인',getUserCheck(empno));
+    io.emit('login check', getUserCheck(empno));
+  });
+  
+  
+  socket.on('joinRoom', ({roomId, name, empno}) => {
+    addUser({id : socketid, name, roomId, empno})
     console.log('방가입',users)
     socket.join(roomId);
     io.to(roomId).emit('joinRoom', roomId);
@@ -48,11 +54,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', (message, roomId, name) => {
-    socket.broadcast.to(roomId).emit('chat message', message, name);
+    socket.broadcast.to(roomId).emit('chat message', message, name, roomId);
     // io.to(roomId).emit('chat message',message);
     console.log(message, roomId, name)
   });
-
+  
 });
 
 const port = 5000; // 노드 서버가 작동할 포트넘버
