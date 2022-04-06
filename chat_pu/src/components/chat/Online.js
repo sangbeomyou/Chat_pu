@@ -1,5 +1,4 @@
 import React from "react";
-import "./Message.css";
 import { Card, Avatar, Badge, Row } from "antd";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -23,7 +22,12 @@ const Online = () => {
   const { onlineUsers } = useSelector((state) => state.user);
   const { room } = useSelector((state) => state.chat);
 
-  const onlineUsersroom = onlineUsers.filter((item) => item.roomId === room)
+  const onlineUsersroom = onlineUsers.filter((item) => item.roomId === room);
+    // 복제거하기
+    onlineUsersroom.map((el) => {
+      delete el.id;
+    });
+    const onlineUserAvatar = [...new Set(onlineUsersroom.map(JSON.stringify))].map(JSON.parse);
 
   return (
     <>
@@ -38,7 +42,7 @@ const Online = () => {
                   backgroundColor: "#1890ff",
                 }}
               >
-                {onlineUsersroom.length}
+                {onlineUserAvatar.length}
               </Avatar>
             </SpanOlineNum>
             <RowWrapper>
@@ -47,9 +51,9 @@ const Online = () => {
                 size={40}
                 maxStyle={{ backgroundColor: "#1890ff" }}
               >
-                {onlineUsersroom.map((item, i) => (
+                {onlineUserAvatar.map((item, i) => (
                   <div key={i}>
-                    <span className="avatar-item">
+                    <span>
                       <Badge count={1}>
                         <Avatar size={40}> {item.name}</Avatar>
                       </Badge>

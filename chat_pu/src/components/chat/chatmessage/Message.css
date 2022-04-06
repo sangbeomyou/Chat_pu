@@ -1,14 +1,13 @@
 .messageBox {
   background: #F3F3F3;
-  border-radius: 20px;
+  border-radius: 15px;
   padding: 5px 20px;
   color: white;
   display: inline-block;
-  max-width: 80%;
+  max-width: 50%;
 }
 
 .messageText {
-  
   width: 100%;
   letter-spacing: 0;
   float: left;
@@ -24,7 +23,13 @@
   display: flex;
   justify-content: flex-end;
   padding: 0 5%;
-  margin-top: 3px;
+}
+
+.sendmessageContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 5%;
+  margin-top: 5px;
 }
 
 .sentText {
@@ -33,6 +38,15 @@
   font-family: Helvetica;
   color: #828282;
   letter-spacing: 0.3px;
+}
+
+.sentName {
+  display: flex;
+  font-family: Helvetica;
+  color: #000000;
+  letter-spacing: 0.3px;
+  padding: 0 5%;
+  margin-top: 5px;
 }
 
 .pl-10 {

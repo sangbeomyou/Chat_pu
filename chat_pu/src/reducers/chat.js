@@ -2,7 +2,7 @@ const chatStates = {
   roomlist: [],
   room: null,
   chatmenutab: "1",
-  invitelist: null,
+  invitelist: [],
 };
 
 //쳇매뉴의 탭 선택
@@ -28,10 +28,19 @@ export const roomlist_Action = (data) => {
     data,
   };
 };
+
 //유저의 방목록을 클릭하면 리듀서에 저장
 export const room_Action = (data) => {
   return {
     type: "ROOM_SET",
+    data,
+  };
+};
+
+//초대유저의 목록에 저장
+export const invite_Action = (data) => {
+  return {
+    type: "INVITE_SET",
     data,
   };
 };
@@ -43,12 +52,12 @@ const reducer = (state = chatStates, action) => {
         ...state,
         chatmenutab: action.data,
       };
-      case "NEWROOM_CLICK":
-        return {
-          ...state,
-          chatmenutab : action.data,
-          room: null,
-        };
+    case "NEWROOM_CLICK":
+      return {
+        ...state,
+        chatmenutab: action.data,
+        room: null,
+      };
     case "ROOMLIST_SET":
       return {
         ...state,
@@ -57,8 +66,12 @@ const reducer = (state = chatStates, action) => {
     case "ROOM_SET":
       return {
         ...state,
-        room: null,
         room: action.data,
+      };
+    case "INVITE_SET":
+      return {
+        ...state,
+        invitelist: action.data,
       };
     default:
       return state;

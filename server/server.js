@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
     io.emit('login check', getUserCheck(empno));
   });
   
-  
+
   socket.on('joinRoom', ({roomId, name, empno}) => {
     addUser({id : socketid, name, roomId, empno})
     console.log('방가입',users)
@@ -53,10 +53,10 @@ io.on('connection', (socket) => {
     io.emit('chat online', users);
   });
 
-  socket.on('chat message', (message, roomId, name) => {
-    socket.broadcast.to(roomId).emit('chat message', message, name, roomId);
+  socket.on('chat message', (message, time, roomId, name, empno) => {
+    socket.broadcast.to(roomId).emit('chat message', message, time, roomId, name, empno);
     // io.to(roomId).emit('chat message',message);
-    console.log(message, roomId, name)
+    console.log(message, time, roomId, name, empno)
   });
   
 });

@@ -27,7 +27,6 @@ const ChatRoom = () => {
 
   //기본 배열
   const { roomlist } = useSelector((state) => state.chat);
-  const { room } = useSelector((state) => state.chat);
   const { me } = useSelector((state) => state.user);
 
   //검색 배열
@@ -48,7 +47,7 @@ const ChatRoom = () => {
         .then(function (response) {
           response.data.result
             ? setup(response.data.posts)
-            : alert("서버 오류 입니다.");
+            : console.error(response.data);
         });
     } catch (error) {
       console.error(error);
@@ -81,7 +80,7 @@ const ChatRoom = () => {
       <List>
         <VirtualList
           data={seachroomdlist}
-          height={540}
+          height={window.innerHeight/2}
           itemHeight={47}
           itemKey="EmpId"
         >
@@ -95,6 +94,7 @@ const ChatRoom = () => {
               <List.Item.Meta
                 onClick={() => {
                   dispatch(room_Action(item.room_id));
+                  console.log('usercnt : ',item.usercnt)
                 }}
                 title={item.chatusers}
                 description={item.chatusers}

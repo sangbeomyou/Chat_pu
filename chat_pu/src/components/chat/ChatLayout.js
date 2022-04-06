@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Row, Col, Button } from "antd";
+import { Row, Col } from "antd";
 import { useSelector } from "react-redux";
 
 import ChatMenu from "./ChatMenu";
-import ChatBox from "./ChatBox";
+import ChatBox from "./chatmessage/ChatBox";
 import Online from "./Online";
+import ChatInvite from "./ChatInvite";
+
 // import NewWindow from "react-new-window";
 
 const ChatLayout = () => {
   const { room } = useSelector((state) => state.chat);
   const { roomlist } = useSelector((state) => state.chat);
+  const { invitelist } = useSelector((state) => state.chat);
 
   // const [chatroomdata, setchatroomdata] = useState([
   //   { room: 1, isopen: false },
@@ -53,12 +56,17 @@ const ChatLayout = () => {
   //   </div>
   // ));
   //겹처서 생성이되어서 키값을 넣어저 다른컴포넌트로 인식시킨다음에 사용 머라는지 모르것다
-  const roomlistaa = roomlist.filter((item) => item.room_id !== room);
+  const roomlistaa = roomlist.filter((item) => item.room_id === room);
+
   return (
     <div>
       <Row gutter={8}>
         <Col xs={24} md={6}>
           <Online />
+          {invitelist.length !== 0 ? 
+          room ? <ChatInvite title="현제 방에 초대"/> : <ChatInvite title="새 체팅방 만들기"/>
+          : <ChatInvite title="체팅방 만들기"/>}
+          
           <ChatMenu />
         </Col>
         <Col xs={24} md={12}>
@@ -69,7 +77,7 @@ const ChatLayout = () => {
               </div>
             ))
           ) : (
-            <>없어용</>
+            <></>
           )}
         </Col>
         <Col xs={24} md={6}></Col>

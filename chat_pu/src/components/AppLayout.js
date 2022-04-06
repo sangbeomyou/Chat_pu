@@ -28,7 +28,6 @@ const AppLayout = () => {
 
   // 유저 정보 받아옴
   const { me } = useSelector((state) => state.user); 
-  const { roomlist } = useSelector((state) => state.chat); 
 
   // 유저 정보 세션에 저장
   localStorage.setItem('me', JSON.stringify(me));
