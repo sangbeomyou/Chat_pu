@@ -13,7 +13,8 @@ import ChatInvite from "./ChatInvite";
 const ChatLayout = () => {
   const { room } = useSelector((state) => state.chat);
   const { roomlist } = useSelector((state) => state.chat);
-  const { invitelist } = useSelector((state) => state.chat);
+  // const { invitelist } = useSelector((state) => state.chat);
+  const { invitemode } = useSelector((state) => state.chat);
 
   // const [chatroomdata, setchatroomdata] = useState([
   //   { room: 1, isopen: false },
@@ -63,9 +64,9 @@ const ChatLayout = () => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           <Online />
-          {invitelist.length !== 0 ? 
-          room ? <ChatInvite title="현제 방에 초대"/> : <ChatInvite title="새 체팅방 만들기"/>
-          : <ChatInvite title="체팅방 만들기"/>}
+          {invitemode ?
+          room ? <ChatInvite title="현재 채팅방에 초대"/> : <ChatInvite title="새 채팅방 만들기"/>
+          : <></>}
           
           <ChatMenu />
         </Col>

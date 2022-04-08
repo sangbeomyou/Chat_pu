@@ -56,6 +56,7 @@ const AppLayout = () => {
           ? connect_room(response.data.posts)
           : alert("서버 오류 입니다.");
       });
+      
     } catch (error) {
       console.error(error);
     }

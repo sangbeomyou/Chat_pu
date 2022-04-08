@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { newroomclick_Action, roomlist_Action, room_Action } from "../../../reducers/chat";
+import { newroomclick_Action, room_Action } from "../../../reducers/chat";
 import { List, Input, Button, Row } from "antd";
 import VirtualList from "rc-virtual-list";
 
@@ -27,41 +26,43 @@ const ChatRoom = () => {
 
   //기본 배열
   const { roomlist } = useSelector((state) => state.chat);
-  const { me } = useSelector((state) => state.user);
+  // const { me } = useSelector((state) => state.user);
 
   //검색 배열
-  const [seachroomdlist, setseachroomdlist] = useState([]);
+  
+  const [seachroomlist, setseachroomlist] = useState(roomlist);
 
-  const setup = (data) => {
-    setseachroomdlist(data);
-    dispatch(roomlist_Action(data));
-  };
-  const callApi = useCallback(async () => {
-    try {
-      await axios
-        .post("/api/chatroomlist", null, {
-          params: {
-            empno: me[0].empno,
-          },
-        })
-        .then(function (response) {
-          response.data.result
-            ? setup(response.data.posts)
-            : console.error(response.data);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  });
+  // const setup = (data) => {
+  //   setseachroomdlist(data);
+  //   dispatch(roomlist_Action(data));
+  // };
+
+  // const callApi = useCallback(async () => {
+  //   try {
+  //     await axios
+  //       .post("/api/chatroomlist", null, {
+  //         params: {
+  //           empno: me[0].empno,
+  //         },
+  //       })
+  //       .then(function (response) {
+  //         response.data.result
+  //           ? setup(response.data.posts)
+  //           : console.error(response.data);
+  //       });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
   // 컴포넌트 재 생성될때 실행
-  useEffect(() => {
-    callApi();
-  }, []);
+  // useEffect(() => {
+  //   setseachroomlist(roomlist);
+  // }, []);
 
   // 검색 함수
   const onSearch = (value) => {
-    setseachroomdlist(
-      roomlist.filter((item) => item.chatusers.includes(value))
+    setseachroomlist(
+      seachroomlist.filter((item) => item.chatusers.includes(value))
     );
   };
 
@@ -79,7 +80,7 @@ const ChatRoom = () => {
       </Row>
       <List>
         <VirtualList
-          data={seachroomdlist}
+          data={roomlist}
           height={window.innerHeight/2}
           itemHeight={47}
           itemKey="EmpId"
@@ -94,16 +95,15 @@ const ChatRoom = () => {
               <List.Item.Meta
                 onClick={() => {
                   dispatch(room_Action(item.room_id));
-                  console.log('usercnt : ',item.usercnt)
                 }}
                 title={item.chatusers}
-                description={item.chatusers}
+                description={item.message ? item.message : "대화 없음"}
               />
             </List.Item>
           )}
         </VirtualList>
       </List>
-    </div>
+    </div> 
   );
 };
 

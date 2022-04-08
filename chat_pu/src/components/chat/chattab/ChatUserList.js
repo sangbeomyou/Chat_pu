@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { List, Avatar, Input } from "antd";
@@ -16,14 +16,15 @@ const SearchInput = styled(Search)`
 const ChatUserList = () => {
   const dispatch = useDispatch();
   //리듀서에 저장된 맴버 리스트를 불러온다
+  const { me } = useSelector((state) => state.user);
   const { member_list } = useSelector((state) => state.member);
   const { invitelist } = useSelector((state) => state.chat);
+  const { invitemode } = useSelector((state) => state.chat);
 
   //체크되면 사번이 배열에 하나씩 추가되게 배열을 선언
-  const [inviteCheck, setinviteCheck] = useState([]);
+  // const [inviteCheck, setinviteCheck] = useState([]);
   // 리듀서의 맴버리스트를 검색어 필터를 걸어 사용해야함으로 다시 스테이트에 저장
-  const [member_list_se, setmember_list_se] = useState(member_list);
-
+  const [member_list_se, setmember_list_se] = useState(member_list.filter((el) => el.EmpId !== me[0].empno));
   // const onchange = (checked, item) => {
   //   //체크가 트루일때
   //   if (checked) {
@@ -38,23 +39,27 @@ const ChatUserList = () => {
   const onSearch = (value) => {
     setmember_list_se(
       member_list.filter(
-        (item) => item.UserName.includes(value) || item.DeptName.includes(value)
+        (item) => (item.UserName.includes(value) || item.DeptName.includes(value)) && item.EmpId !== me[0].empno
       )
     );
   };
 
   const onclick = (item) => {
-    if (inviteCheck.includes(item)){
-      setinviteCheck(inviteCheck.filter((el) => el !== item))
-    } else {
-    setinviteCheck(inviteCheck.concat(item));
+    if (invitemode) {
+      if (invitelist.includes(item)) {
+        //setinviteCheck(inviteCheck.filter((el) => el !== item))
+        dispatch(invite_Action(invitelist.filter((el) => el !== item)));
+      } else {
+        //setinviteCheck(inviteCheck.concat(item));
+        dispatch(invite_Action(invitelist.concat(item)));
+      }
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    dispatch(invite_Action(inviteCheck));
-  }, [dispatch, inviteCheck]);
+  //   dispatch(invite_Action(inviteCheck));
+  // }, [dispatch, inviteCheck]);
 
   return (
     <div>
@@ -62,7 +67,7 @@ const ChatUserList = () => {
       <List>
         <VirtualList
           data={member_list_se}
-          height={window.innerHeight/2 -50}
+          height={window.innerHeight / 2 - 50}
           itemHeight={47}
           itemKey="EmpId"
         >
@@ -80,13 +85,14 @@ const ChatUserList = () => {
                 onClick={() => onclick(item)}
               />
               {/* <Checkbox id={item.EmpId} onChange={onchange}></Checkbox> */}
-              <div>
+              <div onClick={() => console.log(item)}>
                 {/* <input
                   type="checkbox"
                   value={item.EmpId}
                   onChange={(e) => onchange(e.target.checked, item)}
                   checked={inviteCheck.includes(item) ? true : false}
                 ></input> */}
+                정보보기
               </div>
             </List.Item>
           )}

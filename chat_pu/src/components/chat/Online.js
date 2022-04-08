@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const CardWrapper = styled(Card)`
   margin-top: 10px;
+  height: 130px;
 `;
 const RowWrapper = styled(Row)`
   margin-top: 20px;
@@ -23,11 +24,13 @@ const Online = () => {
   const { room } = useSelector((state) => state.chat);
 
   const onlineUsersroom = onlineUsers.filter((item) => item.roomId === room);
-    // 복제거하기
-    onlineUsersroom.map((el) => {
-      delete el.id;
-    });
-    const onlineUserAvatar = [...new Set(onlineUsersroom.map(JSON.stringify))].map(JSON.parse);
+  // 중복제거하기
+  onlineUsersroom.map((el) => {
+    delete el.id;
+  });
+  const onlineUserAvatar = [
+    ...new Set(onlineUsersroom.map(JSON.stringify)),
+  ].map(JSON.parse);
 
   return (
     <>
@@ -55,7 +58,15 @@ const Online = () => {
                   <div key={i}>
                     <span>
                       <Badge count={1}>
-                        <Avatar size={40}> {item.name}</Avatar>
+                        <Avatar
+                          size={40}
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          {" "}
+                          {item.name}
+                        </Avatar>
                       </Badge>
                     </span>
                     &nbsp; &nbsp;

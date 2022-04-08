@@ -3,6 +3,7 @@ const chatStates = {
   room: null,
   chatmenutab: "1",
   invitelist: [],
+  invitemode: false,
 };
 
 //쳇매뉴의 탭 선택
@@ -37,6 +38,14 @@ export const room_Action = (data) => {
   };
 };
 
+//방 초대모드
+export const invitemode_Action = (data) => {
+  return {
+    type: "INVITEMODE_SET",
+    data,
+  };
+};
+
 //초대유저의 목록에 저장
 export const invite_Action = (data) => {
   return {
@@ -57,6 +66,7 @@ const reducer = (state = chatStates, action) => {
         ...state,
         chatmenutab: action.data,
         room: null,
+        invitemode: true,
       };
     case "ROOMLIST_SET":
       return {
@@ -67,6 +77,11 @@ const reducer = (state = chatStates, action) => {
       return {
         ...state,
         room: action.data,
+      };
+    case "INVITEMODE_SET":
+      return {
+        ...state,
+        invitemode: action.data,
       };
     case "INVITE_SET":
       return {
