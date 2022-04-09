@@ -57,7 +57,7 @@ const Online = () => {
                 {onlineUserAvatar.map((item, i) => (
                   <div key={i}>
                     <span>
-                      <Badge count={1}>
+                      {/* <Badge count={1}> */}
                         <Avatar
                           size={40}
                           style={{
@@ -67,7 +67,7 @@ const Online = () => {
                           {" "}
                           {item.name}
                         </Avatar>
-                      </Badge>
+                      {/* </Badge> */}
                     </span>
                     &nbsp; &nbsp;
                   </div>

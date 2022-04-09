@@ -8,7 +8,7 @@ const Message = ({ message }) => {
   moment.locale("ko");
 
   const { me } = useSelector((state) => state.user);
-  const time = moment(message.time).format("LTS").substr(0,8)
+  const time = moment(message.time).format("LTS").substr(0,7)
   return message.empno === me[0].empno ? (
     <>
     <div className="sendmessageContainer justifyEnd">

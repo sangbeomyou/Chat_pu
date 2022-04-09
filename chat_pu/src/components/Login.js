@@ -38,16 +38,16 @@ function Login() {
 
   const onsubmitForm = () => {
     socket.emit("login", id);
-    socket.on("login check", (id) => {
-      if (id.length > 0) {
-        alert("이미 로그인된 아이디 입니다.");
+    // socket.on("login check", (id) => {
+    //   if (id.length > 0) {
+    //     alert("이미 로그인된 아이디 입니다.");
 
 
-      } else {
-        alert("로그인가능.");
+    //   } else {
+    //     alert("로그인가능.");
 
-      }
-    });
+    //   }
+    // });
     axios
     .post("/api/login", null, {
       params: {

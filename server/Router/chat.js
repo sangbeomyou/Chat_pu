@@ -15,7 +15,7 @@ router.post("/chatroomlist", (req, res) => {
     (select ',' + name  from chatroomjoin
         where room_id = a.room_id and room_id in (
     select room_id  from chatroomjoin 
-        where empno = '2110678')
+        where empno = @empno)
         FOR XML PATH('') 
         ),1,1,'') as chatusers,
   a.usercnt,
@@ -28,7 +28,7 @@ router.post("/chatroomlist", (req, res) => {
     on a.room_id = b.room_id
   Left JOIN chatmessage as c
     on a.room_id = c.room_id
-  where a.empno = '2110678'
+  where a.empno = @empno
     group by a.room_id
   ) as a
   where a.isdeleted = 'N'`;
@@ -53,7 +53,7 @@ router.post("/chatroomlist", (req, res) => {
       })
       .on("done", (data) => {
         // 마지막에 실행되는
-        console.log( new Date(),'chatroomlist');
+        // console.log( new Date(),'chatroomlist');
 
         return result.length > 0
           ? res.status(200).send({ result: true, posts: result })
@@ -197,7 +197,6 @@ router.post("/chatroomexit", (req, res) => {
       })
       .on("done", (data) => {
         // 마지막에 실행되는
-        console.log(data);
         return data.rowsAffected[0] > 0
           ? res.status(200).send({ result: true })
           : res.status(200).send({ result: false });
@@ -241,7 +240,6 @@ router.post("/chatmessagelist", (req, res) => {
       })
       .on("done", (data) => {
         // 마지막에 실행되는
-        console.log(new Date(), 'chatmessagelist');
         return result.length > 0
           ? res.status(200).send({ result: true, posts: result })
           : res.status(200).send({ result: false });
