@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { List, Avatar, Input } from "antd";
 import VirtualList from "rc-virtual-list";
+import axios from "axios";
 import { invite_Action } from "../../../reducers/chat";
+import { memberinfo_Action } from "../../../reducers/member";
 
 const { Search } = Input;
 
@@ -24,7 +26,7 @@ const ChatUserList = () => {
   //체크되면 사번이 배열에 하나씩 추가되게 배열을 선언
   // const [inviteCheck, setinviteCheck] = useState([]);
   // 리듀서의 맴버리스트를 검색어 필터를 걸어 사용해야함으로 다시 스테이트에 저장
-  const [member_list_se, setmember_list_se] = useState(member_list.filter((el) => el.EmpId !== me[0].empno));
+  const [member_list_se, setmember_list_se] = useState(member_list.filter((el) => el.EmpId !== me[0].empno && el.DeptId !== 1351));
   // const onchange = (checked, item) => {
   //   //체크가 트루일때
   //   if (checked) {
@@ -39,7 +41,7 @@ const ChatUserList = () => {
   const onSearch = (value) => {
     setmember_list_se(
       member_list.filter(
-        (item) => (item.UserName.includes(value) || item.DeptName.includes(value)) && item.EmpId !== me[0].empno
+        (item) => (item.UserName.includes(value) || item.DeptName.includes(value)) && item.EmpId !== me[0].empno && item.DeptId !== 1351
       )
     );
   };
@@ -60,6 +62,20 @@ const ChatUserList = () => {
 
   //   dispatch(invite_Action(inviteCheck));
   // }, [dispatch, inviteCheck]);
+  // 리스트 클릭
+  const onRowClick = (item) => {
+    axios
+      .post("/api/member_info", null, {
+        params: {
+          empno: item.EmpId,
+        },
+      })
+      .then(function (response) {
+        response.data.result
+          ? dispatch(memberinfo_Action(response.data.posts))
+          : alert("서버 오류입니다.");
+      });
+  };
 
   return (
     <div>

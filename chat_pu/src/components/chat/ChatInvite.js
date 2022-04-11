@@ -3,8 +3,9 @@ import { Button, Card, Avatar, Row } from "antd";
 import styled from "styled-components";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { invite_Action, invitemode_Action, changeTab_Action, roomlist_Action } from "../../reducers/chat";
+import { invite_Action, invitemode_Action, changeTab_Action, roomlist_Action, room_Action } from "../../reducers/chat";
 import AntModal from "../AntModal";
+import { socket } from "./Socket";
 
 const CardWrapper = styled(Card)`
   margin-top: 10px;
@@ -66,11 +67,13 @@ const ChatInvite = ({ title }) => {
         } else {
             dispatch(invite_Action([]));
             dispatch(invitemode_Action(false));
+            dispatch(changeTab_Action('1'));
             callApi();
         }
     })
   };
 
+  //새방 만들면서 새로 방목록 불러오기
   const callApi = useCallback(async () => {
     try {
       await axios
@@ -81,13 +84,23 @@ const ChatInvite = ({ title }) => {
         })
         .then(function (response) {
           response.data.result
-            ? dispatch(roomlist_Action(response.data.posts))
+            ? connect_room(response.data.posts)
             : console.error(response.data);
         });
     } catch (error) {
       console.error(error);
     }
   });
+
+  const connect_room = (data) => {
+    dispatch(roomlist_Action(data))
+    const datalist = []
+    data.map((item) => {
+      datalist.push(item.room_id)
+    })
+    socket.emit("joinRoom", { roomId: datalist, name: me[0].korname, empno: me[0].empno });
+  }
+
 
   //모달 확인버튼 누르면 실행되게 보낼 함수
   const ButtoOnclick = () => {

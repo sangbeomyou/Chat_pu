@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('leaveRoom', (roomId) => {
-    console.log(roomId)
+    console.log('leaveRoom',roomId)
     socket.leave(roomId);
   });
 
@@ -43,14 +43,15 @@ io.on('connection', (socket) => {
     console.log('로그인',getUserCheck(empno));
     io.emit('login check', getUserCheck(empno));
   });
-  
+
 
   socket.on('joinRoom', ({roomId, name, empno}) => {
+    removeUser(socketid)
     addUser({id : socketid, name, roomId, empno})
-    console.log('방가입',users)
     socket.join(roomId);
     io.to(roomId).emit('joinRoom', roomId);
     io.emit('chat online', users);
+    console.log('방가입',users)
   });
 
   socket.on('chat message', (message, time, roomId, name, empno) => {

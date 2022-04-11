@@ -28,6 +28,7 @@ const AppLayout = () => {
 
   // 유저 정보 받아옴
   const { me } = useSelector((state) => state.user); 
+  const { room } = useSelector((state) => state.chat); 
 
   // 유저 정보 세션에 저장
   localStorage.setItem('me', JSON.stringify(me));
@@ -64,22 +65,28 @@ const AppLayout = () => {
 
   const connect_room = (data) => {
     dispatch(roomlist_Action(data))
+    const datalist = []
     data.map((item) => {
-      socket.emit("joinRoom", { roomId: item.room_id, name: me[0].korname, empno: me[0].empno });
+      datalist.push(item.room_id)
     })
+    socket.emit("joinRoom", { roomId: datalist, name: me[0].korname, empno: me[0].empno });
   }
 
   useEffect(() => {
     callApi();
   //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원랴 있던방등 바꾸어 줘야함
 
+  }, [callApi]);
+  
+  useEffect(() => {
   socket.on("chat online", (online) => {
     dispatch(onlineUsersAction(online));
   });
-  
-    // 채팅페이지 접속한 유저를 실시간으로 받아오는 로직 로그인 하거나 나갈때 배열에서 추가하거나 뺴고 여기로 뿌려준다. 
-
-  }, [dispatch, callApi, me]);
+    // 최신 메시지를 저장
+    socket.on("chat message", (message, time, roomId, name, empno) => {
+        console.log({ text: message, time : time, roomId: roomId, name: name, empno : empno })
+    });
+  }, [dispatch, me, room]);
 
   return (
     <div>

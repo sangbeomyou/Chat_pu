@@ -7,14 +7,15 @@ import ChatMenu from "./ChatMenu";
 import ChatBox from "./chatmessage/ChatBox";
 import Online from "./Online";
 import ChatInvite from "./ChatInvite";
+import MemberInfo from "../member/MemberInfo";
 
 // import NewWindow from "react-new-window";
 
 const ChatLayout = () => {
-  const { room } = useSelector((state) => state.chat);
-  const { roomlist } = useSelector((state) => state.chat);
+  const { member_info } = useSelector((state) => state.member);
+
+  const { room, roomlist, invitemode } = useSelector((state) => state.chat);
   // const { invitelist } = useSelector((state) => state.chat);
-  const { invitemode } = useSelector((state) => state.chat);
 
   // const [chatroomdata, setchatroomdata] = useState([
   //   { room: 1, isopen: false },
@@ -64,10 +65,16 @@ const ChatLayout = () => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           <Online />
-          {invitemode ?
-          room ? <ChatInvite title="현재 채팅방에 초대"/> : <ChatInvite title="새 채팅방 만들기"/>
-          : <></>}
-          
+          {invitemode ? (
+            room ? (
+              <ChatInvite title="현재 채팅방에 초대" />
+            ) : (
+              <ChatInvite title="새 채팅방 만들기" />
+            )
+          ) : (
+            <></>
+          )}
+
           <ChatMenu />
         </Col>
         <Col xs={24} md={12}>
@@ -81,7 +88,9 @@ const ChatLayout = () => {
             <></>
           )}
         </Col>
-        <Col xs={24} md={6}></Col>
+        <Col xs={24} md={6}>
+          {/* {member_info ? <>{<MemberInfo />}</> : <></>} */}
+        </Col>
       </Row>
     </div>
   );

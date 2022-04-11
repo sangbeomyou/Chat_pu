@@ -7,7 +7,7 @@ import axios from "axios";
 import styled from "styled-components";
 import "moment/locale/ko";
 import moment from "moment";
-import { invitemode_Action, room_Action, roomlist_Action } from "../../../reducers/chat";
+import { invitemode_Action, room_Action, roomlist_Action, changeTab_Action } from "../../../reducers/chat";
 
 const Container = styled.div`
   margin-top: 10px;
@@ -84,7 +84,7 @@ const ChatBox = () => {
     }
   };
 
-  //방목록 다시 
+  //나갈때 방목록 다시 
   const callRoomList = useCallback(async () => {
     try {
       await axios
@@ -102,7 +102,7 @@ const ChatBox = () => {
       console.error(error);
     }
   });
-
+  // 나가기 버튼
   const userExit = () => {
           axios
           .post("/api/chatroomexit", null, {
@@ -117,6 +117,7 @@ const ChatBox = () => {
             } else {
             callRoomList();
             dispatch(room_Action(null));
+            socket.emit("leaveRoom", room);
             }
           });
   }
@@ -125,9 +126,9 @@ const ChatBox = () => {
 
   useEffect(() => {
     socket.on("chat message", (message, time, roomId, name, empno) => {
-      console.log(message, time, roomId, name, empno);
-      roomId === room
-        ? setreceiveMessage((currentArray) => [
+      // console.log(message, time, roomId, name, empno);
+      if (roomId === room) {
+        setreceiveMessage((currentArray) => [
             {
               message: message,
               time: time,
@@ -137,7 +138,9 @@ const ChatBox = () => {
             },
             ...currentArray,
           ])
-        : console.log({ text: message, position: "다른방", name: name });
+        }
+          // : null;
+        // : console.log({ text: message, position: "다른방", name: name });
     });
   }, [room]);
   //메세지 목록 불러오기
@@ -163,11 +166,17 @@ const ChatBox = () => {
     callApi();
   }, []);
 
+  //인원초대 클릭 이벤트 함수
+  const onClickinvite = () => {
+    dispatch(invitemode_Action(true));
+    dispatch(changeTab_Action('2'));
+  }
+
   //나가기와 인원초대 메뉴
   const menu = (
     <Menu>
       <Menu.Item>
-        <div onClick={() => dispatch(invitemode_Action(true))}>
+        <div onClick={() => onClickinvite()}>
           인원 초대하기
         </div>
       </Menu.Item>

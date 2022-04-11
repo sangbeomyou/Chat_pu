@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Avatar, Badge, Row } from "antd";
+import { Card, Avatar, Row } from "antd";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
@@ -23,7 +23,7 @@ const Online = () => {
   const { onlineUsers } = useSelector((state) => state.user);
   const { room } = useSelector((state) => state.chat);
 
-  const onlineUsersroom = onlineUsers.filter((item) => item.roomId === room);
+  const onlineUsersroom = onlineUsers.filter((item) => item.roomId.includes(room));
   // 중복제거하기
   onlineUsersroom.map((el) => {
     delete el.id;
@@ -57,7 +57,6 @@ const Online = () => {
                 {onlineUserAvatar.map((item, i) => (
                   <div key={i}>
                     <span>
-                      {/* <Badge count={1}> */}
                         <Avatar
                           size={40}
                           style={{
@@ -67,7 +66,6 @@ const Online = () => {
                           {" "}
                           {item.name}
                         </Avatar>
-                      {/* </Badge> */}
                     </span>
                     &nbsp; &nbsp;
                   </div>
