@@ -28,7 +28,6 @@ const ChatRoom = () => {
   //기본 배열
   const { roomlist } = useSelector((state) => state.chat);
 
-
   const [seachroomlist, setseachroomlist] = useState(roomlist);
 
   // const setup = (data) => {
@@ -53,21 +52,24 @@ const ChatRoom = () => {
   //     console.error(error);
   //   }
   // });
-  useEffect(() => {
-      // 최신 메시지를 저장
-      socket.on("chat message", (message, time, roomId, name, empno) => {
-        setseachroomlist(
-          roomlist.map((item) => item.room_id === roomId ? {...item, message : message} : item)
-        )
-      });
-    }, [roomlist]);
 
-console.log(roomlist)
+  useEffect(() => {
+    // 최신 메시지를 저장
+    socket.on("chat message", (message, time, roomId, name, empno) => {
+      setseachroomlist(
+        roomlist.map((item) =>
+          item.room_id === roomId
+            ? { ...item, message: message, event: "새 매세지" }
+            : item
+        )
+      );
+    });
+  }, [roomlist]);
+
+  console.log(roomlist);
   // 검색 함수
   const onSearch = (value) => {
-    setseachroomlist(
-      roomlist.filter((item) => item.chatusers.includes(value))
-    );
+    setseachroomlist(roomlist.filter((item) => item.chatusers.includes(value)));
   };
 
   return (
@@ -75,8 +77,9 @@ console.log(roomlist)
       <SearchInput placeholder="이름" onSearch={onSearch} />
       <Row>
         <ButtonWrapper
-          onClick={() => {dispatch(newroomclick_Action("2"))
-        }}
+          onClick={() => {
+            dispatch(newroomclick_Action("2"));
+          }}
           type="primary"
         >
           새 방 만들기
@@ -85,7 +88,7 @@ console.log(roomlist)
       <List>
         <VirtualList
           data={seachroomlist}
-          height={window.innerHeight/2}
+          height={window.innerHeight / 2}
           itemHeight={47}
           itemKey="EmpId"
         >
@@ -99,15 +102,23 @@ console.log(roomlist)
               <List.Item.Meta
                 onClick={() => {
                   dispatch(room_Action(item.room_id));
+                  delete item.event;
                 }}
                 title={item.chatusers}
                 description={item.message ? item.message : "대화 없음"}
               />
+              <div
+                style={{
+                  color: "#1890ff",
+                }}
+              >
+                {item.event}
+              </div>
             </List.Item>
           )}
         </VirtualList>
       </List>
-    </div> 
+    </div>
   );
 };
 

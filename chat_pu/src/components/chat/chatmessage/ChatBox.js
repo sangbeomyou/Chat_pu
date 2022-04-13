@@ -85,7 +85,7 @@ const ChatBox = () => {
   };
 
   //나갈때 방목록 다시 
-  const callRoomList = useCallback(async () => {
+  const callRoomList = async () => {
     try {
       await axios
         .post("/api/chatroomlist", null, {
@@ -101,7 +101,7 @@ const ChatBox = () => {
     } catch (error) {
       console.error(error);
     }
-  });
+  };
   // 나가기 버튼
   const userExit = () => {
           axios
@@ -126,6 +126,7 @@ const ChatBox = () => {
 
   useEffect(() => {
     socket.on("chat message", (message, time, roomId, name, empno) => {
+
       // console.log(message, time, roomId, name, empno);
       if (roomId === room) {
         setreceiveMessage((currentArray) => [
@@ -160,11 +161,11 @@ const ChatBox = () => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [room]);
 
   useEffect(() => {
     callApi();
-  }, []);
+  }, [callApi]);
 
   //인원초대 클릭 이벤트 함수
   const onClickinvite = () => {

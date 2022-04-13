@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Button, Card, Avatar, Row } from "antd";
 import styled from "styled-components";
 import axios from "axios";
@@ -8,7 +8,6 @@ import {
   invitemode_Action,
   changeTab_Action,
   roomlist_Action,
-  room_Action,
 } from "../../reducers/chat";
 import AntModal from "../AntModal";
 import { socket } from "./Socket";
@@ -127,7 +126,7 @@ const ChatInvite = ({ title }) => {
   };
 
   //새방 만들면서 새로 방목록 불러오기
-  const callApi = useCallback(async () => {
+  const callApi = async () => {
     try {
       await axios
         .post("/api/chatroomlist", null, {
@@ -143,13 +142,13 @@ const ChatInvite = ({ title }) => {
     } catch (error) {
       console.error(error);
     }
-  });
+  };
 
   const connect_room = (data) => {
     dispatch(roomlist_Action(data));
     const datalist = [];
     data.map((item) => {
-      datalist.push(item.room_id);
+      return datalist.push(item.room_id);
     });
     socket.emit("joinRoom", {
       roomId: datalist,
