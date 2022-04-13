@@ -74,7 +74,7 @@ const AppLayout = () => {
 
   useEffect(() => {
     callApi();
-  //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원랴 있던방등 바꾸어 줘야함
+  //소켓 방에 가입 1번 이건 따로 로직짜서 초대 원래 있던방등 바꾸어 줘야함
 
   }, [callApi]);
   
@@ -82,11 +82,12 @@ const AppLayout = () => {
   socket.on("chat online", (online) => {
     dispatch(onlineUsersAction(online));
   });
-    // 최신 메시지를 저장
-    socket.on("chat message", (message, time, roomId, name, empno) => {
-        console.log({ text: message, time : time, roomId: roomId, name: name, empno : empno })
-    });
-  }, [dispatch, me, room]);
+    // // 최신 메시지를 저장
+    // socket.on("chat message", (message, time, roomId, name, empno) => {
+      
+    //     console.log({ text: message, time : time, roomId: roomId, name: name, empno : empno })
+    // });
+  }, [dispatch]);
 
   return (
     <div>

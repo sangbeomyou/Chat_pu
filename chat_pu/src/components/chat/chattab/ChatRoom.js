@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { newroomclick_Action, room_Action } from "../../../reducers/chat";
 import { List, Input, Button, Row } from "antd";
 import VirtualList from "rc-virtual-list";
+import { socket } from "../Socket";
 
 const { Search } = Input;
 
@@ -26,10 +27,8 @@ const ChatRoom = () => {
 
   //기본 배열
   const { roomlist } = useSelector((state) => state.chat);
-  // const { me } = useSelector((state) => state.user);
 
-  //검색 배열
-  
+
   const [seachroomlist, setseachroomlist] = useState(roomlist);
 
   // const setup = (data) => {
@@ -54,15 +53,20 @@ const ChatRoom = () => {
   //     console.error(error);
   //   }
   // });
-  // 컴포넌트 재 생성될때 실행
-  // useEffect(() => {
-  //   setseachroomlist(roomlist);
-  // }, []);
+  useEffect(() => {
+      // 최신 메시지를 저장
+      socket.on("chat message", (message, time, roomId, name, empno) => {
+        setseachroomlist(
+          roomlist.map((item) => item.room_id === roomId ? {...item, message : message} : item)
+        )
+      });
+    }, [roomlist]);
 
+console.log(roomlist)
   // 검색 함수
   const onSearch = (value) => {
     setseachroomlist(
-      seachroomlist.filter((item) => item.chatusers.includes(value))
+      roomlist.filter((item) => item.chatusers.includes(value))
     );
   };
 
@@ -80,7 +84,7 @@ const ChatRoom = () => {
       </Row>
       <List>
         <VirtualList
-          data={roomlist}
+          data={seachroomlist}
           height={window.innerHeight/2}
           itemHeight={47}
           itemKey="EmpId"

@@ -21,15 +21,20 @@ router.post("/chatroomlist", (req, res) => {
   a.usercnt,
   a.message
   from (
-  select a.room_id, max(b.usercnt) as 'usercnt' , max(b.isdeleted) as 'isdeleted', 
-         max(c.message) as 'message', max(c.time)as 'time' 
+  select a.room_id, b.usercnt as 'usercnt' , b.isdeleted as 'isdeleted', 
+         c.message as 'message', c.message_id as 'message_id' 
         from chatroomjoin as a
   Left JOIN chatroom as b
     on a.room_id = b.room_id
-  Left JOIN chatmessage as c
-    on a.room_id = c.room_id
+  Left JOIN (
+  select  *  from chatmessage
+  where time in (
+  select max(time) 
+  from chatmessage
+  group by room_id)
+  ) as c
+   on a.room_id = c.room_id
   where a.empno = @empno
-    group by a.room_id
   ) as a
   where a.isdeleted = 'N'`;
   pool.connect((err) => {

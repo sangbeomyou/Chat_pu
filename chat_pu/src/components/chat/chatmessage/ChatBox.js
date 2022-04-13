@@ -44,7 +44,7 @@ const ChatBox = () => {
   };
 
   const onsubmitForm = () => {
-    //공백 안들어가게
+    //양 쪽 사이 공백 안들어가게
     if (sendMessage !== "") {
       setreceiveMessage((currentArray) => [
         {
