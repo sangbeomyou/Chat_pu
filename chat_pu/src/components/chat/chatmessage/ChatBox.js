@@ -155,8 +155,7 @@ const ChatBox = () => {
         })
         .then(function (response) {
           response.data.result
-            ? setreceiveMessage(response.data.posts)
-            : console.log(response.data.posts);
+            && setreceiveMessage(response.data.posts)
         });
     } catch (error) {
       console.error(error);

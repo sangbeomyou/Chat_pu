@@ -26,7 +26,7 @@ const Online = () => {
   const onlineUsersroom = onlineUsers.filter((item) => item.roomId.includes(room));
   // 중복제거하기
   onlineUsersroom.map((el) => {
-    delete el.id;
+    return delete el.id;
   });
   const onlineUserAvatar = [
     ...new Set(onlineUsersroom.map(JSON.stringify)),

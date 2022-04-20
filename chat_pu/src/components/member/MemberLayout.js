@@ -12,13 +12,12 @@ const Member = () => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {tree_list
-          ? <>{<TreeMenu/>}</>
-          : <></>}
+          && <TreeMenu/>
+          }
         </Col>
         <Col xs={24} md={18}>
-          {selectedKeys || searchkeys
-          ? <>{<MemberTable/>}</>
-          : <></>}
+          {(selectedKeys || searchkeys)
+          && <MemberTable/>}
         </Col>
       </Row>
     </div>

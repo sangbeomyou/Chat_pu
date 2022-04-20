@@ -12,7 +12,6 @@ import Member from "./member/MemberLayout";
 import Chat from "./chat/ChatLayout";
 import { socket } from "./chat/Socket";
 
-
 const LeftMenu = styled(Menu.Item)`
   margin-left: auto;
 `;
@@ -28,7 +27,7 @@ const AppLayout = () => {
 
   // 유저 정보 받아옴
   const { me } = useSelector((state) => state.user); 
-  const { room } = useSelector((state) => state.chat); 
+  // const { room } = useSelector((state) => state.chat); 
 
   // 유저 정보 세션에 저장
   localStorage.setItem('me', JSON.stringify(me));
@@ -61,13 +60,13 @@ const AppLayout = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [dispatch]);
+  }, [dispatch, me]);
 
   const connect_room = (data) => {
     dispatch(roomlist_Action(data))
     const datalist = []
     data.map((item) => {
-      datalist.push(item.room_id)
+      return datalist.push(item.room_id)
     })
     socket.emit("joinRoom", { roomId: datalist, name: me[0].korname, empno: me[0].empno });
   }

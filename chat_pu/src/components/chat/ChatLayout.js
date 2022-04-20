@@ -7,12 +7,12 @@ import ChatMenu from "./ChatMenu";
 import ChatBox from "./chatmessage/ChatBox";
 import Online from "./Online";
 import ChatInvite from "./ChatInvite";
-import MemberInfo from "../member/MemberInfo";
+// import MemberInfo from "../member/MemberInfo";
 
 // import NewWindow from "react-new-window";
 
 const ChatLayout = () => {
-  const { member_info } = useSelector((state) => state.member);
+  // const { member_info } = useSelector((state) => state.member);
 
   const { room, roomlist, invitemode } = useSelector((state) => state.chat);
   // const { invitelist } = useSelector((state) => state.chat);
@@ -78,14 +78,12 @@ const ChatLayout = () => {
           <ChatMenu />
         </Col>
         <Col xs={24} md={12}>
-          {room ? (
+          {room && (
             roomlistaa.map((item) => (
               <div key={item.room_id}>
                 <ChatBox />
               </div>
             ))
-          ) : (
-            <></>
           )}
         </Col>
         <Col xs={24} md={6}>

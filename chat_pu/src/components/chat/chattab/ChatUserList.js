@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { List, Avatar, Input } from "antd";
 import VirtualList from "rc-virtual-list";
-import axios from "axios";
+// import axios from "axios";
+// import { memberinfo_Action } from "../../../reducers/member";
+
 import { invite_Action } from "../../../reducers/chat";
-import { memberinfo_Action } from "../../../reducers/member";
 
 const { Search } = Input;
 
@@ -63,19 +64,19 @@ const ChatUserList = () => {
   //   dispatch(invite_Action(inviteCheck));
   // }, [dispatch, inviteCheck]);
   // 리스트 클릭
-  const onRowClick = (item) => {
-    axios
-      .post("/api/member_info", null, {
-        params: {
-          empno: item.EmpId,
-        },
-      })
-      .then(function (response) {
-        response.data.result
-          ? dispatch(memberinfo_Action(response.data.posts))
-          : alert("서버 오류입니다.");
-      });
-  };
+  // const onRowClick = (item) => {
+  //   axios
+  //     .post("/api/member_info", null, {
+  //       params: {
+  //         empno: item.EmpId,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       response.data.result
+  //         ? dispatch(memberinfo_Action(response.data.posts))
+  //         : alert("서버 오류입니다.");
+  //     });
+  // };
 
   return (
     <div>

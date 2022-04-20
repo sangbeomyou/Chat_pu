@@ -30,9 +30,8 @@ const ButtonWrapper = styled(Button)`
 
 const ChatInvite = ({ title }) => {
   const dispatch = useDispatch();
-  const { invitelist } = useSelector((state) => state.chat);
+  const { invitelist, room } = useSelector((state) => state.chat);
   const { me } = useSelector((state) => state.user);
-  const { room } = useSelector((state) => state.chat);
 
   const AvatarOnclick = (item) => {
     dispatch(invite_Action(invitelist.filter((el) => el !== item)));
@@ -143,7 +142,7 @@ const ChatInvite = ({ title }) => {
       console.error(error);
     }
   };
-
+  //방새로 불르면서 소켓 방 가입
   const connect_room = (data) => {
     dispatch(roomlist_Action(data));
     const datalist = [];
@@ -156,6 +155,8 @@ const ChatInvite = ({ title }) => {
       empno: me[0].empno,
     });
   };
+
+
 
   //모달 확인버튼 누르면 실행되게 보낼 함수
   const ButtoOnclick = () => {
