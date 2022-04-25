@@ -7,7 +7,12 @@ import axios from "axios";
 import styled from "styled-components";
 import "moment/locale/ko";
 import moment from "moment";
-import { invitemode_Action, room_Action, roomlist_Action, changeTab_Action } from "../../../reducers/chat";
+import {
+  invitemode_Action,
+  room_Action,
+  roomlist_Action,
+  changeTab_Action,
+} from "../../../reducers/chat";
 
 const Container = styled.div`
   margin-top: 10px;
@@ -32,12 +37,14 @@ const ChatBox = () => {
   //   "LTS"
   // );
   const momenttime = moment().format("YYYY-MM-DD HH:mm:ss");
-  
+
   const [sendMessage, setsendMessage] = useState("");
   const [receiveMessage, setreceiveMessage] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageEnd, setpageEnd] = useState(false);
+  const [fetching, setfetching] = useState(false);
   const { me } = useSelector((state) => state.user);
-  const { roomlist } = useSelector((state) => state.chat);
-  const { room } = useSelector((state) => state.chat);
+  const { roomlist, room, infinitestate } = useSelector((state) => state.chat);
 
   const onChange = (e) => {
     setsendMessage(e.target.value);
@@ -84,7 +91,7 @@ const ChatBox = () => {
     }
   };
 
-  //나갈때 방목록 다시 
+  //나갈때 방목록 다시
   const callRoomList = async () => {
     try {
       await axios
@@ -104,81 +111,97 @@ const ChatBox = () => {
   };
   // 나가기 버튼
   const userExit = () => {
-          axios
-          .post("/api/chatroomexit", null, {
-            params: {
-              room_id: room,
-              empno: me[0].empno,
-            },
-          })
-          .then(function (response) {
-            if (!response.data.result) {
-              alert("서버 오류입니다");
-            } else {
-            callRoomList();
-            dispatch(room_Action(null));
-            socket.emit("leaveRoom", room);
-            }
-          });
-  }
+    axios
+      .post("/api/chatroomexit", null, {
+        params: {
+          room_id: room,
+          empno: me[0].empno,
+        },
+      })
+      .then(function (response) {
+        if (!response.data.result) {
+          alert("서버 오류입니다");
+        } else {
+          callRoomList();
+          dispatch(room_Action(null));
+          socket.emit("leaveRoom", room);
+        }
+      });
+  };
   // 방 인원 목록
   const roomtitle = roomlist.filter((item) => item.room_id === room)[0];
 
   useEffect(() => {
     socket.on("chat message", (message, time, roomId, name, empno) => {
-
       // console.log(message, time, roomId, name, empno);
       if (roomId === room) {
         setreceiveMessage((currentArray) => [
-            {
-              message: message,
-              time: time,
-              room_id: roomId,
-              empno: empno,
-              name: name,
-            },
-            ...currentArray,
-          ])
-        }
-          // : null;
-        // : console.log({ text: message, position: "다른방", name: name });
+          {
+            message: message,
+            time: time,
+            room_id: roomId,
+            empno: empno,
+            name: name,
+          },
+          ...currentArray,
+        ]);
+      }
+      // : null;
+      // : console.log({ text: message, position: "다른방", name: name });
     });
   }, [room]);
   //메세지 목록 불러오기
   const callApi = useCallback(async () => {
+    setfetching(true);
     try {
       await axios
         .post("/api/chatmessagelist", null, {
           params: {
+            page: page,
             room: room,
           },
         })
         .then(function (response) {
-          response.data.result
-            && setreceiveMessage(response.data.posts)
+          if (response.data.result) {
+            setTimeout(async function () {
+              await setreceiveMessage(
+                receiveMessage.concat(response.data.posts)
+              );
+            }, 150);
+            setfetching(false);
+          } else {
+            setpageEnd(true);
+          }
+          // response.data.result ? setreceiveMessage(receiveMessage.concat(response.data.posts))
+          // : setLoading(true);
         });
     } catch (error) {
       console.error(error);
     }
-  }, [room]);
+  }, [room, page]);
 
   useEffect(() => {
     callApi();
   }, [callApi]);
 
+  useEffect(() => {
+    if (infinitestate && !pageEnd && !fetching) {
+      setPage((prevState) => prevState + 1);
+    }
+  }, [infinitestate, pageEnd]);
+
+  
   //인원초대 클릭 이벤트 함수
   const onClickinvite = () => {
     dispatch(invitemode_Action(true));
-    dispatch(changeTab_Action('2'));
-  }
+    dispatch(changeTab_Action("2"));
+  };
 
   //나가기와 인원초대 메뉴
   const menu = (
     <Menu>
       <Menu.Item>
-        <div onClick={() => onClickinvite()}>
-          인원 초대하기
-        </div>
+        <div onClick={() => onClickinvite()}>인원 초대하기</div>
       </Menu.Item>
       <Menu.Item>
         <div onClick={() => userExit()}>나가기</div>

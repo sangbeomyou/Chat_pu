@@ -4,6 +4,7 @@ const chatStates = {
   chatmenutab: "1",
   invitelist: [],
   invitemode: false,
+  infinitestate: false,
 };
 
 //쳇매뉴의 탭 선택
@@ -54,6 +55,14 @@ export const invite_Action = (data) => {
   };
 };
 
+//채팅방 무한 스크롤링
+export const infinitestate_Action = (data) => {
+  return {
+    type: "INFINTE_SET",
+    data,
+  };
+};
+
 const reducer = (state = chatStates, action) => {
   switch (action.type) {
     case "CHANGE_TAB":
@@ -87,6 +96,11 @@ const reducer = (state = chatStates, action) => {
       return {
         ...state,
         invitelist: action.data,
+      };
+    case "INFINTE_SET":
+      return {
+        ...state,
+        infinitestate: action.data,
       };
     default:
       return state;

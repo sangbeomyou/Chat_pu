@@ -7,6 +7,7 @@ import ChatMenu from "./ChatMenu";
 import ChatBox from "./chatmessage/ChatBox";
 import Online from "./Online";
 import ChatInvite from "./ChatInvite";
+
 // import MemberInfo from "../member/MemberInfo";
 
 // import NewWindow from "react-new-window";

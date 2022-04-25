@@ -214,7 +214,9 @@ router.post("/chatmessagelist", (req, res) => {
   const pool = new sql.ConnectionPool(config);
   const request = new sql.Request(pool);
   var result = [];
-  q = `select 
+  q = `  WITH message_list AS
+  (
+  select ROW_NUMBER() OVER(ORDER BY a.message_id desc) AS 'No',
   a.message, a.time, a.room_id, 
   a.empno, b.name 
   from chatMessage as a
@@ -223,7 +225,10 @@ router.post("/chatmessagelist", (req, res) => {
   and a.room_id=b.room_id
   where a.isDeleted = 'N'
   and a.room_id = ${req.query.room}
-  order by a.message_id desc`;
+)
+SELECT *
+ FROM message_list 
+ WHERE No between ${((req.query.page - 1) * 10) + 1} and ${req.query.page * 10}`;
   pool.connect((err) => {
     if (err) {
       console.error(err);

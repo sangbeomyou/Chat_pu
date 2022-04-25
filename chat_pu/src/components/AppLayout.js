@@ -78,6 +78,8 @@ const AppLayout = () => {
   }, [callApi]);
   
   useEffect(() => {
+    console.log(document.body.getBoundingClientRect());
+
   socket.on("chat online", (online) => {
     dispatch(onlineUsersAction(online));
   });
