@@ -12,7 +12,7 @@ const Messagebox = styled(ScrollToBottom)`
   padding: 0;
   overflow: auto;
   flex: auto;
-  /* &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
     border-radius: 6px;
@@ -21,7 +21,7 @@ const Messagebox = styled(ScrollToBottom)`
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
-  } */
+  }
 `;
 
 const BorderBlock = styled.div`
@@ -61,7 +61,7 @@ const ChatMessages = ({ receiveMessage }) => {
   useEffect(() => {
     dispatch(infinitestate_Action(inView))
   }, [inView])
-  
+
   return (
     <Messagebox>
       {messages.map((message, i) => (

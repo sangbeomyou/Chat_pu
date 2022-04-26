@@ -42,7 +42,7 @@ const ChatBox = () => {
   const [receiveMessage, setreceiveMessage] = useState([]);
   const [page, setPage] = useState(1);
   const [pageEnd, setpageEnd] = useState(false);
-  const [fetching, setfetching] = useState(false);
+  const [fetching, setfetching] = useState();
   const { me } = useSelector((state) => state.user);
   const { roomlist, room, infinitestate } = useSelector((state) => state.chat);
 
@@ -164,19 +164,21 @@ const ChatBox = () => {
         .then(function (response) {
           if (response.data.result) {
             setTimeout(async function () {
+              // console.log(response.data.posts)
               await setreceiveMessage(
                 receiveMessage.concat(response.data.posts)
               );
-            }, 150);
-            setfetching(false);
+            }, 200);
           } else {
             setpageEnd(true);
-          }
+          } 
           // response.data.result ? setreceiveMessage(receiveMessage.concat(response.data.posts))
           // : setLoading(true);
         });
     } catch (error) {
       console.error(error);
+    } finally {
+       setfetching(false);
     }
   }, [room, page]);
 
@@ -187,10 +189,11 @@ const ChatBox = () => {
   useEffect(() => {
     if (infinitestate && !pageEnd && !fetching) {
       setPage((prevState) => prevState + 1);
+      // console.log(page);
+      // console.log(receiveMessage);
     }
   }, [infinitestate, pageEnd]);
 
-  
   //인원초대 클릭 이벤트 함수
   const onClickinvite = () => {
     dispatch(invitemode_Action(true));

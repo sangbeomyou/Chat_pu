@@ -228,7 +228,7 @@ router.post("/chatmessagelist", (req, res) => {
 )
 SELECT *
  FROM message_list 
- WHERE No between ${((req.query.page - 1) * 10) + 1} and ${req.query.page * 10}`;
+ WHERE No between ${((req.query.page - 1) * 15) + 1} and ${req.query.page * 15}`;
   pool.connect((err) => {
     if (err) {
       console.error(err);
