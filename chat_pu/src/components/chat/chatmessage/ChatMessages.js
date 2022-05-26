@@ -60,7 +60,7 @@ const ChatMessages = ({ receiveMessage }) => {
 
   useEffect(() => {
     dispatch(infinitestate_Action(inView))
-  }, [inView])
+  }, [inView, dispatch])
 
   return (
     <Messagebox>

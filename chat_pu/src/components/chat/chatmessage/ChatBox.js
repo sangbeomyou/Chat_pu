@@ -174,11 +174,11 @@ const ChatBox = () => {
           } 
           // response.data.result ? setreceiveMessage(receiveMessage.concat(response.data.posts))
           // : setLoading(true);
+          setfetching(false);
+
         });
     } catch (error) {
       console.error(error);
-    } finally {
-       setfetching(false);
     }
   }, [room, page]);
 

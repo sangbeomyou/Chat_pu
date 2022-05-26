@@ -156,8 +156,6 @@ const ChatInvite = ({ title }) => {
     });
   };
 
-
-
   //모달 확인버튼 누르면 실행되게 보낼 함수
   const ButtoOnclick = () => {
     invitelist.length !== 0 ? roominsert() : alert("초대할 인원이 없습니다.");

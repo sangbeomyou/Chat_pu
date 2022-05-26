@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { loginAction } from "../reducers/user";
 import { useDispatch } from "react-redux";
 import { socket } from "./chat/Socket";
+import { getData } from "../lib/api";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -61,7 +62,8 @@ function Login() {
         : alert("아이디와 비밀번호를 확인해주세요");
     });
   };
-
+  console.log(getData())
+  
   return (
     <Row gutter={8}>
       <Col xs={24} md={6}></Col>
